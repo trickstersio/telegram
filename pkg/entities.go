@@ -7,8 +7,6 @@ const (
 
 	MethodSendMessage = "sendMessage"
 	MethodSetWebhook  = "setWebhook"
-
-	CommandStart = "/start"
 )
 
 type Response struct {
