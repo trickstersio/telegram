@@ -15,20 +15,20 @@ Create client instance and start calling methods:
 ```golang
 package main
 
-import "github.com/trickstersio/telegram/pkg"
+import "github.com/trickstersio/telegram"
 
 func main()  {
     client := telegram.NewClient()
-    
+
     msg, err := client.SendMessage(SendMessageArgs{
         ChatID: 1,
         Text: "Hello, World!",
     })
-    
+
     if err != nil {
         log.Fatal(err)
     }
-    
+
     log.Println("Sent message", msg.ID)
 }
 ```
@@ -38,5 +38,5 @@ func main()  {
 You can run tests using following command:
 
 ```shell script
-go test github.com/trickstersio/telegram/pkg
+go test github.com/trickstersio/telegram
 ```
