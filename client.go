@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -28,7 +29,7 @@ func NewClient(token string, configurators ...Configurator) *Client {
 	return client
 }
 
-func (t *Client) Call(method string, args interface{}, out interface{}) error {
+func (t *Client) Call(ctx context.Context, method string, args interface{}, out interface{}) error {
 	httpRequestBody, err := json.Marshal(args)
 	methodURL := fmt.Sprintf("%s/bot%s/%s", t.url, t.token, method)
 
@@ -49,7 +50,7 @@ func (t *Client) Call(method string, args interface{}, out interface{}) error {
 	httpRequest.Header.Set("Accept", "application/json")
 	httpRequest.Header.Set("Content-Type", "application/json")
 
-	httpResponse, err := t.httpClient.Do(httpRequest)
+	httpResponse, err := t.httpClient.Do(httpRequest.WithContext(ctx))
 
 	if err != nil {
 		return fmt.Errorf("failed to send request: %w", err)
@@ -86,18 +87,18 @@ func (t *Client) Call(method string, args interface{}, out interface{}) error {
 	return nil
 }
 
-func (t *Client) SetWebhook(args SetWebhookArgs) error {
-	if err := t.Call(MethodSetWebhook, args, nil); err != nil {
+func (t *Client) SetWebhook(ctx context.Context, args SetWebhookArgs) error {
+	if err := t.Call(ctx, MethodSetWebhook, args, nil); err != nil {
 		return fmt.Errorf("failed to call method %s: %w", MethodSetWebhook, err)
 	}
 
 	return nil
 }
 
-func (t *Client) SendMessage(args SendMessageArgs) (Message, error) {
+func (t *Client) SendMessage(ctx context.Context, args SendMessageArgs) (Message, error) {
 	var message Message
 
-	if err := t.Call(MethodSendMessage, args, &message); err != nil {
+	if err := t.Call(ctx, MethodSendMessage, args, &message); err != nil {
 		return Message{}, fmt.Errorf("failed to call method %s: %w", MethodSendMessage, err)
 	}
 

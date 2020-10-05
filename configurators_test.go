@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -11,6 +12,7 @@ import (
 
 func TestWithHTTPClient(t *testing.T) {
 	assert := is.New(t)
+	ctx := context.Background()
 
 	in := Message{
 		Text: "Hello from Telegram!",
@@ -18,7 +20,7 @@ func TestWithHTTPClient(t *testing.T) {
 
 	client := NewClient("test", WithClientMock(true, in))
 
-	out, err := client.SendMessage(SendMessageArgs{})
+	out, err := client.SendMessage(ctx, SendMessageArgs{})
 
 	assert.NoErr(err)
 	assert.Equal(out.Text, in.Text)
@@ -26,6 +28,7 @@ func TestWithHTTPClient(t *testing.T) {
 
 func TestWithURL(t *testing.T) {
 	assert := is.New(t)
+	ctx := context.Background()
 
 	in := Message{
 		Text: "Hello from Telegram!",
@@ -49,7 +52,7 @@ func TestWithURL(t *testing.T) {
 
 	client := NewClient("test", WithURL(server.URL))
 
-	out, err := client.SendMessage(SendMessageArgs{})
+	out, err := client.SendMessage(ctx, SendMessageArgs{})
 
 	assert.NoErr(err)
 	assert.Equal(out.Text, in.Text)
