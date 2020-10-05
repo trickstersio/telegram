@@ -15,12 +15,15 @@ Create client instance and start calling methods:
 ```golang
 package main
 
-import "github.com/trickstersio/telegram"
+import (
+    "context"
+    "github.com/trickstersio/telegram"
+)
 
 func main()  {
     client := telegram.NewClient()
 
-    msg, err := client.SendMessage(SendMessageArgs{
+    msg, err := client.SendMessage(context.Background(), SendMessageArgs{
         ChatID: 1,
         Text: "Hello, World!",
     })
